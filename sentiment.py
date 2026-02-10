@@ -23,3 +23,5 @@ texts = [
 for text in texts:
     result = pipeline(text)
     print(f"Text: {text}\nSentiment: {result}\n")
+
+
