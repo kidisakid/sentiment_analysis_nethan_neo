@@ -1,6 +1,3 @@
-# Using bert for sentiment analysis
-# https://huggingface.co/transformers/v3.0.2/model_doc/
-
 from transformers import pipeline
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
