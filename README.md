@@ -128,10 +128,13 @@ Review,Sentiment
 
 ```
 .
-├── main.py                 # Orchestrator - flexible CLI entry point
+├── main.py                 # Entry point - launches UI
+├── ui/
+│   ├── __init__.py        # UI package initialization
+│   └── merge_page.py      # Main UI launcher
 ├── src/
-│   ├── __init__.py        # Package initialization
-│   ├── sentiment.py        # ML module with BERT pipeline
+│   ├── __init__.py        # ML package initialization
+│   ├── sentiment.py        # ML module with all functions
 │   └── sentiment_ui.py     # Streamlit UI application
 ├── data/
 │   └── Test_File-2.csv     # Sample test data
@@ -142,10 +145,17 @@ Review,Sentiment
 ## Architecture
 
 ```
-main.py (Orchestrator)
-  ├── Single Text Analysis → sentiment.py → BERT Model
-  ├── CSV Batch Processing → sentiment.py → BERT Model → CSV Output
-  └── Interactive UI → sentiment_ui.py → Streamlit Interface
+main.py (Simple entry point)
+    ↓
+ui/merge_page.py (UI launcher)
+    ↓
+src/sentiment.py (All core functions)
+    ├── analyze_text() - Single text analysis
+    ├── analyze_csv() - Batch CSV processing
+    ├── run_streamlit_ui() - Launch Streamlit app
+    └── main() - CLI interface
+    ↓
+BERT Model (cardiffnlp/twitter-roberta-base-sentiment)
 ```
 
 ## Getting Started
@@ -171,72 +181,60 @@ pip install -r requirements.txt
 
 ### Quick Start
 
-**Option 1: Use the Main Orchestrator** (Recommended - Most flexible)
+**Option 1: Launch Interactive UI** (Recommended)
 ```bash
-# Launch interactive UI (default)
 python main.py
+```
+Opens the Streamlit interface at `http://localhost:8501`
 
-# Analyze single text from command line
-python main.py --text "I absolutely love this!"
+**Option 2: CLI Commands** (Using src/sentiment.py directly)
+```bash
+# Analyze single text
+python src/sentiment.py --text "I absolutely love this!"
 
 # Analyze CSV file
-python main.py --csv data/reviews.csv --column review_text
+python src/sentiment.py --csv data/reviews.csv --column review_text
 
-# Analyze CSV with custom output file
-python main.py --csv data/reviews.csv --column review_text --output results.csv
-```
+# Analyze CSV with custom output
+python src/sentiment.py --csv data/reviews.csv --column review_text --output results.csv
 
-**Option 2: Use the Streamlit UI Directly**
-```bash
-streamlit run src/sentiment_ui.py
+# Show help
+python src/sentiment.py --help
 ```
 
 **Option 3: Use the Python Module** (For developers/integration)
 ```python
-from src.sentiment import pipeline
+from src.sentiment import pipeline, analyze_text, analyze_csv
 
-text = "I love this project!"
-result = pipeline(text)
-print(result)
+# Single text analysis
+text = "I love this product!"
+result = analyze_text(text)
+
+# Batch CSV processing
+df = analyze_csv('data/reviews.csv', 'review_text')
 ```
 
-## Main Orchestrator (`main.py`)
+## Main Application (`main.py`)
 
-Flexible command-line interface for all sentiment analysis tasks.
+Simple entry point that launches the interactive Streamlit UI.
 
-### Features
-- 🚀 **Streamlit UI** - Interactive web interface (default)
-- 📝 **Single Text** - Quick analysis from command line
-- 📊 **Batch CSV** - Analyze entire CSV files
-- 💾 **Auto-save** - Results saved to CSV automatically
-- 📈 **Progress Tracking** - Real-time analysis progress
+```python
+from ui.merge_page import merge
 
-### Usage Examples
-
-```bash
-# Launch Streamlit web app
-python main.py --ui
-
-# Analyze single text
-python main.py --text "This is amazing!"
-
-# Analyze CSV (saves to input_sentiment.csv)
-python main.py --csv data/reviews.csv --column review_text
-
-# Analyze CSV with custom output
-python main.py --csv data/reviews.csv --column review_text --output analyzed.csv
-
-# Show help
-python main.py --help
+if __name__ == "__main__":
+    merge()
 ```
 
-### Command-Line Options
+## Core Module (`src/sentiment.py`)
 
-| Option | Description |
-|--------|-------------|
-| `--ui` | Launch interactive Streamlit UI |
-| `--text TEXT` | Analyze single text string |
-| `--csv PATH` | Analyze CSV file |
-| `--column COL` | Column name in CSV to analyze (required with `--csv`) |
-| `--output PATH` | Output CSV file path (optional, defaults to `{input}_sentiment.csv`) |
-| `--help` | Show help message |
+Contains all sentiment analysis functionality.
+
+### Available Functions
+
+| Function | Purpose |
+|----------|---------|
+| `analyze_text(text)` | Analyze sentiment of single text |
+| `analyze_csv(csv_path, column, output_path)` | Batch process CSV file |
+| `run_streamlit_ui()` | Launch interactive Streamlit app |
+| `main()` | CLI interface with argument parsing |
+| `pipeline(text)` | Direct BERT sentiment analysis |
