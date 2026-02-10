@@ -4,9 +4,9 @@ Provide a simple Streamlit UI within app.py for testing
 
 Tasks / Requirements:
 1. Create ML/sentiment.py with a predict_sentiment(text) function:
-- Tokenizes input
-- Runs it through BERT
-- Returns Positive / Neutral / Negative
+✅ Tokenizes input
+✅ Runs it through BERT
+✅ Returns Positive / Neutral / Negative
 - Test the module with sample text and verify outputs
 
 2. Create a new branch (e.g., machine_learning/sentiment-analysis) and open a PR:
