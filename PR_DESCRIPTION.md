@@ -113,22 +113,12 @@ df = analyze_csv('customer_reviews.csv', 'review_text')
 print(df)
 ```
 
-for review in df['review_text']:
-    result = pipeline(review)
-    label = result[0]['label']
-    # Map LABEL_0→Negative, LABEL_1→Neutral, LABEL_2→Positive
-    sentiments.append(label)
-
-df['sentiment'] = sentiments
-df.to_csv('customer_reviews_analyzed.csv', index=False)
-```
-
-**Output**: `customer_reviews_analyzed.csv`
+**Output**: `customer_reviews_analyzed.csv` (auto-saved)
 ```csv
-customer_id,review_text,sentiment
-1,Great service and fast delivery!,LABEL_2
-2,Product arrived damaged unfortunately,LABEL_0
-3,Works as described nothing more,LABEL_1
+customer_id,review_text,Sentiment
+1,Great service and fast delivery!,Positive
+2,Product arrived damaged unfortunately,Negative
+3,Works as described nothing more,Neutral
 ```
 
 ## Testing
@@ -145,8 +135,8 @@ Comprehensive documentation is available in `README.md` including:
 - Installation instructions
 - ML module API reference
 - Streamlit UI user guide
-- Troubleshooting tips
-- Performance notes
+- Quick start examples
+- Performance benchmarks
 
 ## Installation & Setup
 
@@ -154,12 +144,23 @@ Comprehensive documentation is available in `README.md` including:
 # Install dependencies
 pip install -r requirements.txt
 
-# Run ML module (Python)
-python3 -c "from src.sentiment import pipeline; print(pipeline('I love this!'))"
+# Launch the application
+python main.py
 
-# Run Streamlit UI
-streamlit run src/sentiment_ui.py
+# Or use command-line interface
+python src/sentiment.py --text "I love this!"
+python src/sentiment.py --csv data/reviews.csv --column review_text
 ```
+
+## Project Architecture
+
+```
+main.py → ui/merge_page.py → src/sentiment.py → BERT Model
+```
+
+- **main.py**: Simple entry point (3 lines)
+- **ui/merge_page.py**: UI launcher
+- **src/sentiment.py**: All core functions (analyze_text, analyze_csv, main, run_streamlit_ui, pipeline)
 
 ## Performance Characteristics
 
@@ -180,9 +181,11 @@ Closes #(week2_task) - Sentiment analysis implementation with BERT and Streamlit
 ## Checklist
 
 - ✅ Code follows project conventions
-- ✅ ML module tested with sample data
+- ✅ ML module with all functions tested
 - ✅ Streamlit UI functional and user-friendly
 - ✅ Dependencies documented in requirements.txt
 - ✅ README.md updated with comprehensive documentation
-- ✅ Sample usage provided
+- ✅ Sample usage provided for all use cases
+- ✅ Simple main.py entry point
+- ✅ UI separated into dedicated folder
 - ✅ No breaking changes

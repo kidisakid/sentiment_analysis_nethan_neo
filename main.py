@@ -1,11 +1,14 @@
 """
 Sentiment Analysis Application
 
-Simple entry point that launches the interactive UI.
-For command-line options, see src/sentiment.py
+Simple entry point that launches the interactive Streamlit UI.
 """
 
-from ui.merge_page import merge
+import subprocess
+import sys
 
 if __name__ == "__main__":
-    merge()
+    subprocess.run(
+        [sys.executable, "-m", "streamlit", "run", "src/sentiment_ui.py"],
+        check=True
+    )
