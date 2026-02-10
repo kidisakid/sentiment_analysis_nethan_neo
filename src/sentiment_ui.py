@@ -17,29 +17,32 @@ else:
 content = st.selectbox("Select the content column", column_list)
 
 if st.button("Analyze"):
-    analysis = []
-    
-    with st.spinner('Analyzing...'):
-        for text in df[content]:
-            result = pipeline(text)
+    if df is None:
+        st.warning("Please upload a csv file for sentiment analysis")
+    else:
+        analysis = []
+        
+        with st.spinner('Analyzing...'):
+            for text in df[content]:
+                result = pipeline(text)
 
-            if result[0]['label'] == 'LABEL_0':
-                result[0]['label'] = 'Negative'
-            elif result[0]['label'] == 'LABEL_1':
-                result[0]['label'] = 'Neutral'
-            elif result[0]['label'] == 'LABEL_2':
-                result[0]['label'] = 'Positive'
+                if result[0]['label'] == 'LABEL_0':
+                    result[0]['label'] = 'Negative'
+                elif result[0]['label'] == 'LABEL_1':
+                    result[0]['label'] = 'Neutral'
+                elif result[0]['label'] == 'LABEL_2':
+                    result[0]['label'] = 'Positive'
 
-            analysis.append(result[0]['label'].capitalize())
+                analysis.append(result[0]['label'].capitalize())
 
-    #Add sentiment column
-    df['Sentiment'] = analysis 
-    st.write(df[[content, 'Sentiment']])
-    
-    #Download button
-    st.download_button(
-        label="Download CSV",
-        data=df.to_csv(index=False),
-        file_name=uploaded_file.name.split('.')[0] + '_sentiment.csv',
-        mime='text/csv',
-    )
+        #Add sentiment column
+        df['Sentiment'] = analysis 
+        st.write(df[[content, 'Sentiment']])
+        
+        #Download button
+        st.download_button(
+            label="Download CSV",
+            data=df.to_csv(index=False),
+            file_name=uploaded_file.name.split('.')[0] + '_sentiment.csv',
+            mime='text/csv',
+        )
