@@ -22,6 +22,8 @@ texts = [
 
 for text in texts:
     result = pipeline(text)
-    print(f"Text: {text}\nSentiment: {result}\n")
-
+    # Print the result magnitude/score as negative, neutral, or positive
+    sentiment = result[0]['label']
+    score = result[0]['score']
+    print(f"Text: {text}\nSentiment: {sentiment} (Score: {score})\n")
 
