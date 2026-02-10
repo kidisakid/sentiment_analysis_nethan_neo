@@ -22,6 +22,14 @@ if st.button("Analyze"):
     with st.spinner('Analyzing...'):
         for text in df[content]:
             result = pipeline(text)
+
+            if result[0]['label'] == 'LABEL_0':
+                result[0]['label'] = 'Negative'
+            elif result[0]['label'] == 'LABEL_1':
+                result[0]['label'] = 'Neutral'
+            elif result[0]['label'] == 'LABEL_2':
+                result[0]['label'] = 'Positive'
+
             analysis.append(result[0]['label'].capitalize())
 
     #Add sentiment column
@@ -32,6 +40,6 @@ if st.button("Analyze"):
     st.download_button(
         label="Download CSV",
         data=df.to_csv(index=False),
-        file_name=uploaded_file.name.split('.')[0] + '_sentiment_analysis.csv',
+        file_name=uploaded_file.name.split('.')[0] + '_sentiment.csv',
         mime='text/csv',
     )
