@@ -7,8 +7,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 pipeline = pipeline(
     task='sentiment-analysis',
     # Load the model and tokenizer from Hugging Face
-    model='distilbert-base-uncased-finetuned-sst-2-english',
-
+    model='distilbert-base-uncased-finetuned-sst-2-english'
 )
 
 texts = [
@@ -17,11 +16,12 @@ texts = [
     "The movie was okay, not the best but not the worst either.",
     "I am extremely happy with the service. The staff was friendly and helpful.",
     "The food was terrible. I will never eat here again."
-    "Good staff, but the food was not up to my expectations. It was just average."
-    "Bad experience. The product broke after one use and customer service was unhelpful."
+    "Good staff, but the food was not up to my expectations. It was just average.",
+    "Bad experience. The product broke after one use and customer service was unhelpful.",
     "I am unsatisfied with the quality of the product. It did not meet my needs and I will be returning it.",
     "I did not enjoy the movie. The plot was predictable and the acting was subpar. I would not recommend it to others."
     ]
+
 
 for text in texts:
     result = pipeline(text)
@@ -29,4 +29,3 @@ for text in texts:
     # using score thresholds: negative (<0.4), neutral (0.4-0.6), positive (>0.6)
 
     print(f"Text: {text}\nSentiment: {result}\n")
-

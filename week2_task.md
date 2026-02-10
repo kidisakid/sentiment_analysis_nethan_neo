@@ -7,7 +7,7 @@ Tasks / Requirements:
 ✅ Tokenizes input
 ✅ Runs it through BERT
 ✅ Returns Positive / Neutral / Negative
-- Test the module with sample text and verify outputs
+✅ Test the module with sample text and verify outputs
 
 2. Create a new branch (e.g., machine_learning/sentiment-analysis) and open a PR:
 - Include purpose, dependencies, and example usage in PR description
