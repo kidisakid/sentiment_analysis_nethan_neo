@@ -32,6 +32,6 @@ if st.button("Analyze"):
     st.download_button(
         label="Download CSV",
         data=df.to_csv(index=False),
-        file_name='sentiment_analysis.csv',
+        file_name=uploaded_file.name.split('.')[0] + '_sentiment_analysis.csv',
         mime='text/csv',
     )
