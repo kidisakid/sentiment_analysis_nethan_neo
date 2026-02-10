@@ -17,7 +17,7 @@ Usage:
     print(result)
 """
 
-from .sentiment import pipeline
+from .model import pipeline
 
 __version__ = "1.0.0"
 __all__ = ["pipeline"]
