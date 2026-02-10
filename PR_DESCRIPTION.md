@@ -15,12 +15,17 @@ This PR introduces a **sentiment classification system** that analyzes text data
 ## Changes Made
 
 ### New Files
-- `src/sentiment.py` - ML module with BERT sentiment pipeline
-- `src/sentiment_ui.py` - Streamlit web application for sentiment analysis
+- `main.py` - Simple entry point launching the UI
+- `ui/merge_page.py` - UI launcher function
+- `ui/__init__.py` - UI package initialization
+- `src/__init__.py` - ML package initialization
+- `src/sentiment.py` - ML module with all core functions
+- `src/sentiment_ui.py` - Streamlit web application
 - `README.md` - Comprehensive documentation
+- `PR_DESCRIPTION.md` - PR template
 
 ### Modified Files
-- `requirements.txt` - Added `transformers` and `streamlit` dependencies
+- `requirements.txt` - Dependencies: `transformers`, `streamlit`
 
 ## Dependencies
 
@@ -37,46 +42,60 @@ pandas                   # Data manipulation
 
 ## Sample Usage
 
-### Example 1: Using the ML Module
+### Example 1: Launch Interactive UI
+
+```bash
+python main.py
+# Opens Streamlit interface at http://localhost:8501
+```
+
+### Example 2: Using the ML Module Functions
 
 ```python
-from src.sentiment import pipeline
+from src.sentiment import analyze_text, analyze_csv
 
-# Analyze single text
+# Single text analysis
 text = "This product exceeded my expectations!"
-result = pipeline(text)
+result = analyze_text(text)
 print(result)
-# Output: [{'label': 'LABEL_2', 'score': 0.98}]  # Positive sentiment
+# Output: {'label': 'LABEL_2', 'score': 0.98}  # Positive sentiment
 
 # Batch process multiple texts
 texts = [
-    "I absolutely love this!",           # Expected: Positive
-    "It's fine, nothing special",        # Expected: Neutral
-    "This is terrible and disappointing" # Expected: Negative
+    "I absolutely love this!",           # Positive
+    "It's fine, nothing special",        # Neutral
+    "This is terrible and disappointing" # Negative
 ]
 
 for text in texts:
-    result = pipeline(text)
-    label = result[0]['label']
-    score = result[0]['score']
-    print(f"{text} → {label} (confidence: {score:.2f})")
+    result = analyze_text(text)
+    print(f"{text}\nSentiment: {result['label']}, Score: {result['score']:.2f}\n")
 ```
 
-### Example 2: Using the Streamlit UI
+### Example 3: Batch CSV Processing
+
+```python
+from src.sentiment import analyze_csv
+
+# Analyze entire CSV file
+df = analyze_csv('customer_reviews.csv', 'review_text', 'results.csv')
+print(df)
+```
+
+### Example 4: Command-Line Interface
 
 ```bash
-# Start the application
-streamlit run src/sentiment_ui.py
+# Analyze single text
+python src/sentiment.py --text "I love this!"
 
-# Then in the browser:
-# 1. Upload a CSV file with text data
-# 2. Select the column containing text to analyze
-# 3. Click "Analyze" button
-# 4. View results in the table
-# 5. Download updated CSV with Sentiment column
+# Analyze CSV file
+python src/sentiment.py --csv data/reviews.csv --column review_text
+
+# Analyze with custom output
+python src/sentiment.py --csv data/reviews.csv --column review_text --output analyzed.csv
 ```
 
-### Example 3: Real-World Workflow
+### Example 5: Real-World Workflow
 
 **Input**: `customer_reviews.csv`
 ```csv
@@ -88,11 +107,11 @@ customer_id,review_text
 
 **Process**:
 ```python
-from src.sentiment import pipeline
-import pandas as pd
+from src.sentiment import analyze_csv
 
-df = pd.read_csv('customer_reviews.csv')
-sentiments = []
+df = analyze_csv('customer_reviews.csv', 'review_text')
+print(df)
+```
 
 for review in df['review_text']:
     result = pipeline(review)
