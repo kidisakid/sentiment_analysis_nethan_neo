@@ -26,6 +26,7 @@ import sys
 from pathlib import Path
 
 import pandas as pd
+import torch
 
 from src.sentiment import pipeline
 
