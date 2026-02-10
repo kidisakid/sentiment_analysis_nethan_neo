@@ -26,15 +26,14 @@ def sentiment():
             with st.spinner('Analyzing...'):
                 for text in df[content]:
                     result = pipeline(text)
+                    if result[0]['label'] == 'LABEL_0':
+                        result[0]['label'] = 'Negative'
+                    elif result[0]['label'] == 'LABEL_1':
+                        result[0]['label'] = 'Neutral'
+                    elif result[0]['label'] == 'LABEL_2':
+                        result[0]['label'] = 'Positive'
 
-                if result[0]['label'] == 'LABEL_0':
-                    result[0]['label'] = 'Negative'
-                elif result[0]['label'] == 'LABEL_1':
-                    result[0]['label'] = 'Neutral'
-                elif result[0]['label'] == 'LABEL_2':
-                    result[0]['label'] = 'Positive'
-
-                    analysis.append(result[0]['label'].capitalize())
+                    analysis.append(result[0]['label'])
 
             #Add sentiment column
             df['Sentiment'] = analysis 
